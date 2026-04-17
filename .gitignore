@@ -4,5 +4,6 @@
 /storage/templates_c/*
 /public/uploads/generated/*
 /.docker/nginx/certs/*
+/.docker/nginx/logs/*
 /.bs
 /.idea
