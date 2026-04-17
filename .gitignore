@@ -1,0 +1,7 @@
+/vendor/
+/.env
+/storage/cache/*
+/storage/templates_c/*
+/public/uploads/generated/*
+/.docker/nginx/certs/*
+/.bs

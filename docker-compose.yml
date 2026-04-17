@@ -1,0 +1,65 @@
+name: blog
+services:
+  blog_nginx:
+    build:
+      context: ./.docker
+    container_name: blog_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./.docker/conf.d:/etc/nginx/conf.d
+      - ./:/var/www/html
+      - ./.docker/logs:/var/log/nginx
+      - ./.docker/certs:/var/certs
+    depends_on:
+      - blog_php_8.2
+  blog_php_8.2:
+    build:
+      context: ./.docker
+    container_name: blog_php_8.2
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    volumes:
+      - ./.docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ./:/var/www/html
+    user: "ubuntu"
+    networks:
+      - shared_network
+    depends_on:
+      - blog_mariadb_10.11
+
+  blog_mariadb_10.11:
+    build:
+      context: ./.docker/mysql   # где лежит наш Dockerfile
+    container_name: blog_mariadb_10.11
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - blog_mysql_data:/var/lib/mysql
+      - ./.docker/mysql/init:/docker-entrypoint-initdb.d  # Добавляем директорию с инициализацией
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-blog}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-blog}
+      MYSQL_USER: ${MYSQL_USER:-blog}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-blog}
+    ports:
+      - "${MYSQL_PORT:-3336}:3306"
+    networks:
+      - shared_network
+
+  blog_adminer:
+    container_name: blog_adminer
+    image: adminer
+    ports:
+      - "8080:8080"
+    networks:
+      - shared_network
+    depends_on:
+      - blog_mariadb_10.11
+
+networks:
+  shared_network:
+    name: my_shared_network
+
+volumes:
+  blog_mysql_data:
