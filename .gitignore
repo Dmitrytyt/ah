@@ -5,3 +5,4 @@
 /public/uploads/generated/*
 /.docker/nginx/certs/*
 /.bs
+/.idea
