@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Core\Request;
 use App\Models\Post;
+use App\Services\HtmlSanitizer;
 
 class PostController extends Controller
 {
@@ -19,9 +20,9 @@ class PostController extends Controller
             return;
         }
 
-        $postModel->incrementViews((int) $post['id']);
-        $post['views']++;
+        $post['views'] = $postModel->incrementViews((int) $post['id']);
         $post['categories'] = $postModel->categoriesForPost((int) $post['id']);
+        $post['content_safe'] = (new HtmlSanitizer())->sanitize((string) $post['content']);
         $relatedPosts = $postModel->related((int) $post['id'], 3);
 
         $this->view('post/show', [

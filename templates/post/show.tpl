@@ -13,7 +13,7 @@
     </div>
 
     <p class="excerpt">{$post.excerpt|escape}</p>
-    <div class="post-content">{$post.content nofilter}</div>
+    <div class="post-content">{$post.content_safe nofilter}</div>
 </article>
 
 <section class="related-section">

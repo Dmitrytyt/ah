@@ -7,7 +7,9 @@
     "smarty/smarty": "^5.4",
     "vlucas/phpdotenv": "^5.6",
     "fakerphp/faker": "^1.24",
-    "ext-pdo": "*"
+    "ext-pdo": "*",
+    "ext-dom": "*",
+    "ext-libxml": "*"
   },
   "autoload": {
     "psr-4": {

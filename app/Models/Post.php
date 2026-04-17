@@ -19,7 +19,6 @@ class Post extends Model
     public function paginateByCategory(int $categoryId, string $sort, int $page, int $perPage): array
     {
         $sortSql = $sort === 'views' ? 'p.views DESC, p.published_at DESC' : 'p.published_at DESC';
-        $offset = ($page - 1) * $perPage;
 
         $countStmt = $this->db->prepare(
             'SELECT COUNT(*)
@@ -29,6 +28,9 @@ class Post extends Model
         );
         $countStmt->execute(['category_id' => $categoryId]);
         $total = (int) $countStmt->fetchColumn();
+        $lastPage = max(1, (int) ceil($total / $perPage));
+        $page = min($page, $lastPage);
+        $offset = ($page - 1) * $perPage;
 
         $stmt = $this->db->prepare(
             "SELECT p.*
@@ -49,15 +51,20 @@ class Post extends Model
                 'current_page' => $page,
                 'per_page' => $perPage,
                 'total' => $total,
-                'last_page' => max(1, (int) ceil($total / $perPage)),
+                'last_page' => $lastPage,
             ],
         ];
     }
 
-    public function incrementViews(int $postId): void
+    public function incrementViews(int $postId): int
     {
         $stmt = $this->db->prepare('UPDATE posts SET views = views + 1 WHERE id = :id');
         $stmt->execute(['id' => $postId]);
+
+        $viewsStmt = $this->db->prepare('SELECT views FROM posts WHERE id = :id LIMIT 1');
+        $viewsStmt->execute(['id' => $postId]);
+
+        return (int) $viewsStmt->fetchColumn();
     }
 
     public function categoriesForPost(int $postId): array

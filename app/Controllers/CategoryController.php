@@ -23,10 +23,17 @@ class CategoryController extends Controller
         }
 
         $sort = $request->query('sort', 'date');
-        $page = max(1, (int) $request->query('page', 1));
+        $rawPage = (int) $request->query('page', 1);
+        $page = max(1, min(1000, $rawPage));
         $perPage = 6;
 
         $result = $postModel->paginateByCategory((int) $category['id'], $sort, $page, $perPage);
+
+        if ($rawPage > $result['pagination']['last_page']) {
+            http_response_code(404);
+            echo 'Страница не найдена';
+            return;
+        }
 
         $this->view('category/show', [
             'pageTitle' => $category['name'],
