@@ -16,9 +16,9 @@
 ```bash
 cp .env.example .env
 docker compose up -d --build
-docker compose exec app composer install
-docker compose exec app php database/migrate.php
-docker compose exec app php database/seed.php
+docker compose exec blog_php_8.2 composer install
+docker compose exec blog_php_8.2 php database/migrate.php
+docker compose exec blog_php_8.2 php database/seed.php
 ```
 
 Сайт: http://localhost:8080

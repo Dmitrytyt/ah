@@ -1,14 +1,15 @@
 FROM php:8.2-fpm-bookworm
+COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
-    git unzip libzip-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev \
+    git unzip libzip-dev libpng-dev libjpeg62-turbo-dev libfreetype6-dev $PHPIZE_DEPS \
     && docker-php-ext-install pdo pdo_mysql \
+    && pecl install xdebug \
+    && docker-php-ext-enable xdebug \
+    && apt-get purge -y --auto-remove $PHPIZE_DEPS \
     && rm -rf /var/lib/apt/lists/*
-
-RUN curl -fsSL https://getcomposer.org/installer \
-    | php -- --install-dir=/usr/local/bin --filename=composer
 
 RUN mkdir -p /.composer
 
