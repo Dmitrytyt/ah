@@ -68,5 +68,5 @@ npm run styles:build
 npm run styles:watch
 ```
 
-- исходники SCSS: `assets/scss/style.scss`
+- исходники SCSS: `src/scss/style.scss`
 - итоговый CSS: `public/assets/css/style.css`
