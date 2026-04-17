@@ -38,3 +38,35 @@ php -S localhost:8000 -t public
 - `/` — главная
 - `/category/{slug}` — категория
 - `/post/{slug}` — статья
+
+
+## Стили (SCSS)
+В проект добавлен сборщик стилей на базе Dart Sass.
+Требуемая версия Node.js для сборки: **20+**.
+
+### Через Docker (рекомендуется)
+```bash
+docker compose up -d blog_node_20
+docker compose exec blog_node_20 npm install
+docker compose exec blog_node_20 npm run styles:build
+```
+
+Для разработки с автоматической пересборкой:
+```bash
+docker compose exec blog_node_20 npm run styles:watch
+```
+
+### Локально
+```bash
+npm install
+npm run styles:build
+```
+
+Для разработки с автоматической пересборкой:
+
+```bash
+npm run styles:watch
+```
+
+- исходники SCSS: `assets/scss/style.scss`
+- итоговый CSS: `public/assets/css/style.css`

@@ -3,7 +3,10 @@
 /storage/cache/*
 /storage/templates_c/*
 /public/uploads/generated/*
+/public/assets/css/*
 /.docker/nginx/certs/*
 /.docker/nginx/logs/*
 /.bs
 /.idea
+
+/node_modules/

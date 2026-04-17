@@ -1,0 +1,14 @@
+{
+  "name": "ah-blog",
+  "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "styles:build": "sass --no-source-map assets/scss/style.scss public/assets/css/style.css",
+    "styles:watch": "sass --watch assets/scss/style.scss:public/assets/css/style.css"
+  },
+  "devDependencies": {
+    "sass": "^1.93.2"
+  }
+}

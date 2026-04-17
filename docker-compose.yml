@@ -60,6 +60,16 @@ services:
     depends_on:
       - blog_mariadb_10.11
 
+  blog_node_20:
+    container_name: blog_node_20
+    image: node:20-alpine
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    command: ["sh", "-c", "tail -f /dev/null"]
+    networks:
+      - shared_network
+
 networks:
   shared_network:
     name: my_shared_network
